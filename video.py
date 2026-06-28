@@ -25,7 +25,7 @@ SUPER_ADMIN = 8789240020          # Aapki ID (Main Owner)
 app = Client("video_manager_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 # --- Storage Files & Folders Setup ---
-VIDEO_FOLDER = "videos"
+VIDEO_FOLDER = "Video"
 USER_FILE = "user.txt"
 ADMIN_FILE = "admins.txt"
 BAN_FILE = "banned.txt"
@@ -174,12 +174,12 @@ async def get_video_request(client, message: Message):
         return
 
     # Fetch random/available video from folder
-    videos = [f for f in os.listdir(VIDEO_FOLDER) if f.endswith(('.mp4', '.mkv', '.avi'))]
-    if not videos:
+    Video = [f for f in os.listdir(VIDEO_FOLDER) if f.endswith(('.mp4', '.mkv', '.avi'))]
+    if not Video:
         await message.reply_text("😔 Sorry! Abhi folder me koi video uploaded nahi hai.")
         return
 
-    video_path = os.path.join(VIDEO_FOLDER, videos[0]) # Pehli video bhej raha hai sample ke liye
+    video_path = os.path.join(VIDEO_FOLDER, Video[0]) # Pehli video bhej raha hai sample ke liye
 
     # Load custom admin injected buttons underneath the video
     buttons_list = load_list(BUTTON_FILE)
@@ -251,11 +251,11 @@ async def remove_video_cmd(client, message: Message):
 @app.on_message(filters.command("checkvideo") & filters.private)
 async def check_video_cmd(client, message: Message):
     if not is_admin(message.from_user.id): return
-    videos = os.listdir(VIDEO_FOLDER)
-    if not videos:
+    Video = os.listdir(VIDEO_FOLDER)
+    if not Video:
         await message.reply_text("📁 Folder khali hai!")
     else:
-        await message.reply_text("📂 **Storage Videos:**\n\n" + "\n".join([f"🔹 `{v}`" for v in videos]))
+        await message.reply_text("📂 **Storage Video:**\n\n" + "\n".join([f"🔹 `{v}`" for v in Video]))
 
 @app.on_message(filters.command("forcechanneladd") & filters.private)
 async def force_add_cmd(client, message: Message):
@@ -367,7 +367,7 @@ async def handle_admin_inputs(client, message: Message):
 
     elif state == "UPLOAD_VIDEO":
         if message.video:
-            status = await message.reply_text("📥 Video download hokar `videos/` folder me save ho rahi hai...")
+            status = await message.reply_text("📥 Video download hokar `Video/` folder me save ho rahi hai...")
             file_name = message.video.file_name if message.video.file_name else f"video_{message.id}.mp4"
             await message.download(file_name=os.path.join(VIDEO_FOLDER, file_name))
             await status.edit_text(f"✅ Successful! Video saved as `{file_name}` in system storage.")
@@ -400,3 +400,4 @@ async def handle_admin_inputs(client, message: Message):
 if __name__ == "__main__":
     print("🤖 Premium Video Manager & Referral System Bot Started...")
     app.run()
+                                   
